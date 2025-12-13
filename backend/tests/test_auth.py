@@ -35,3 +35,25 @@ def test_register_user(client):
     assert data["username"] == "candy_fan"
     assert "password" not in data  # NEVER return the password!
     assert "id" in data
+
+def test_login_and_get_token(client):
+    """
+    Test that a registered user can login and get a JWT token.
+    """
+    # 1. Register a user
+    client.post("/api/auth/register", json={"username": "token_user", "password": "password123"})
+    
+    # 2. Login
+    login_data = {
+        "username": "token_user",
+        "password": "password123"
+    }
+    # Note: OAuth2PasswordRequestForm usually expects form data, not JSON, 
+    # but for simplicity in this specific endpoint, we'll verify what our implementation requires.
+    # Standard FastAPI OAuth2 implementation uses form-data.
+    response = client.post("/api/auth/login", data=login_data)
+    
+    assert response.status_code == 200
+    data = response.json()
+    assert "access_token" in data
+    assert data["token_type"] == "bearer"
