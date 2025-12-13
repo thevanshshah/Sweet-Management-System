@@ -1,24 +1,24 @@
 from typing import Optional
-from sqlmodel import SQLModel, Field
+from sqlmodel import Field, SQLModel
+
+class UserBase(SQLModel):
+    username: str = Field(index=True, unique=True)
+    # New: Role field (admin vs customer)
+    role: str = Field(default="customer") 
+
+class User(UserBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    hashed_password: str
+
+class UserCreate(UserBase):
+    password: str
+
+class UserRead(UserBase):
+    id: int
 
 class Sweet(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
     category: str
     price: float
-    quantity: int
-
-class User(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    username: str = Field(index=True, unique=True)
-    hashed_password: str
-
-# Schema for receiving data (No ID, plain password)
-class UserCreate(SQLModel):
-    username: str
-    password: str
-
-# Schema for returning data (No password!)
-class UserRead(SQLModel):
-    id: int
-    username: str
+    quantity: int = Field(default=0)
