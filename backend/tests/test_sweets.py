@@ -54,3 +54,35 @@ def test_create_sweet(client):
     assert data["name"] == "Chocolate Fudge"
     assert data["quantity"] == 100
     assert "id" in data
+
+def test_purchase_sweet(client):
+    """
+    Test purchasing a sweet decreases its quantity.
+    """
+    # 1. Create a sweet with 10 items
+    payload = {"name": "Lollipop", "category": "Hard Candy", "price": 0.5, "quantity": 10}
+    create_res = client.post("/api/sweets", json=payload)
+    sweet_id = create_res.json()["id"]
+
+    # 2. Purchase one item
+    response = client.post(f"/api/sweets/{sweet_id}/purchase")
+    
+    assert response.status_code == 200
+    data = response.json()
+    assert data["quantity"] == 9  # Should drop from 10 to 9
+
+def test_purchase_out_of_stock(client):
+    """
+    Test that purchasing fails if quantity is 0.
+    """
+    # 1. Create a sweet with 0 items
+    payload = {"name": "Rare Candy", "category": "Special", "price": 100.0, "quantity": 0}
+    create_res = client.post("/api/sweets", json=payload)
+    sweet_id = create_res.json()["id"]
+
+    # 2. Try to purchase
+    response = client.post(f"/api/sweets/{sweet_id}/purchase")
+    
+    # Should fail with 400 Bad Request
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Sweet out of stock"
