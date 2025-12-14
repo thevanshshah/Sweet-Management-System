@@ -13,7 +13,7 @@
 6. [API Reference](#-api-reference)
 7. [Testing & TDD](#-testing--tdd)
 8. [My AI Usage](#-my-ai-usage)
-9. [Screenshots](#-Output)
+9. [Screenshots](#-screenshots)
 ---
 
 ## 🧐 What is This System?
