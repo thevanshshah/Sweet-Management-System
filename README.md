@@ -188,7 +188,14 @@ All critical architectural decisions, security mechanisms, and business rules we
 
 ## 📸 Screenshots
 1. Login & Registration
-2. Customer Shop View
-3. Admin Panel
+<img width="1902" height="945" alt="image" src="https://github.com/user-attachments/assets/f8a9c32a-73ef-45cc-9f4c-0b5717eebfd3" />
+<img width="852" height="814" alt="image" src="https://github.com/user-attachments/assets/e4e282c7-1ac7-49e5-a38f-d587bd43ecee" />
+<img width="1897" height="944" alt="image" src="https://github.com/user-attachments/assets/5250454d-1f73-4d43-8b30-1225ce7f3477" />
 
+2. Customer Shop View
+<img width="1895" height="901" alt="image" src="https://github.com/user-attachments/assets/6699dc53-67fd-4ec3-8c25-f1fe9f7cd6e8" />
+
+3. Admin Panel
+<img width="1868" height="944" alt="image" src="https://github.com/user-attachments/assets/cc02272c-5238-4dba-8e53-9bd647f47cd2" />
+<img width="1891" height="845" alt="image" src="https://github.com/user-attachments/assets/b5dbd42b-f89f-4261-8ace-5281d5ea6e44" />
 ### Made with care by Vansh Shah
