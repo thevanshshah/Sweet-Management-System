@@ -4,68 +4,85 @@ import './App.css'
 import SweetsList from './components/SweetsList'
 import Login from './components/Login'
 import AdminPanel from './components/AdminPanel'
-import Register from './components/Register' // <--- 1. Import Register
+import Register from './components/Register'
+import { FaStore } from 'react-icons/fa'   // ✅ Storefront icon
 
 function App() {
   const [message, setMessage] = useState('')
   const [token, setToken] = useState(null)
-  const [role, setRole] = useState(null) 
+  const [role, setRole] = useState(null)
   const [view, setView] = useState('shop')
   const [searchTerm, setSearchTerm] = useState('')
-  
-  // 2. New State to switch between Login and Register forms
-  const [authView, setAuthView] = useState('login') 
+  const [authView, setAuthView] = useState('login')
 
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/')
       .then(res => setMessage(res.data.message))
-      .catch(err => setMessage("Backend Disconnected"))
+      .catch(() => setMessage('Backend Disconnected'))
   }, [])
 
   const handleLogout = () => {
     setToken(null)
     setRole(null)
     setView('shop')
-    setAuthView('login') // Reset to login view on logout
+    setAuthView('login')
   }
 
   return (
     <div>
       {/* NAVBAR */}
       <nav className="navbar">
-        <div className="logo" onClick={() => setView('shop')} style={{cursor: 'pointer'}}>
-          🍬 Sweet Manager
+        {/* LOGO */}
+        <div
+          className="logo"
+          onClick={() => setView('shop')}
+          style={{
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            fontWeight: '700',
+            fontSize: '1.3rem'
+          }}
+        >
+          <FaStore size={22} color="#fff" />
+          <span>Sweet Shop </span>
         </div>
 
+        {/* SEARCH */}
         {view === 'shop' && (
           <div className="search-bar">
-            <input 
-              type="text" 
-              placeholder="Search sweets..." 
+            <input
+              type="text"
+              placeholder="Search sweets..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={searchStyle}
             />
           </div>
         )}
-        
+
+        {/* NAV LINKS */}
         <div className="nav-links">
           {!token ? (
-             <span style={{fontSize: '0.9rem'}}>Guest Mode</span>
+            <span style={{ fontSize: '0.9rem' }}>Guest Mode</span>
           ) : (
-            <div style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
-              <span style={{fontSize: '0.8rem', marginRight: '10px'}}>
-                Logged in as: <strong>{role ? role.toUpperCase() : 'USER'}</strong>
+            <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.8rem', marginRight: '10px' }}>
+                Logged in as: <strong>{role?.toUpperCase()}</strong>
               </span>
-              
+
               <button onClick={() => setView('shop')}>Shop</button>
-              
+
               {role === 'admin' && (
-                <button onClick={() => setView('admin')} style={{backgroundColor: '#e74c3c', border: 'none'}}>
+                <button
+                  onClick={() => setView('admin')}
+                  style={{ backgroundColor: '#e74c3c', border: 'none' }}
+                >
                   Admin Panel
                 </button>
               )}
-              
+
               <button onClick={handleLogout}>Logout</button>
             </div>
           )}
@@ -75,42 +92,47 @@ function App() {
       {/* MAIN CONTENT */}
       {!token ? (
         <div className="container">
-           <div className="welcome-banner">
+          <div className="welcome-banner">
             <h1>Welcome to Sweet Manager</h1>
             <p>Please log in or register to browse our exclusive sweets.</p>
-           </div>
-          
-          {/* 3. SWITCH BETWEEN LOGIN AND REGISTER */}
+          </div>
+
           {authView === 'login' ? (
-            <Login 
-              setToken={setToken} 
-              setRole={setRole} 
-              onRegisterClick={() => setAuthView('register')} 
+            <Login
+              setToken={setToken}
+              setRole={setRole}
+              onRegisterClick={() => setAuthView('register')}
             />
           ) : (
-            <Register 
-              onLoginClick={() => setAuthView('login')} 
-            />
+            <Register onLoginClick={() => setAuthView('login')} />
           )}
-
         </div>
       ) : (
         <>
-          {/* Authenticated Views */}
           {view === 'shop' && (
-            <SweetsList 
-              token={token} 
-              searchTerm={searchTerm} 
-              role={role} 
+            <SweetsList
+              token={token}
+              searchTerm={searchTerm}
+              role={role}
             />
           )}
-          
-          {/* SECURITY: Even if they manually set view, we block rendering if not admin */}
-          {view === 'admin' && role === 'admin' && <AdminPanel token={token} />}
+
+          {/* SECURITY: render admin panel only if admin */}
+          {view === 'admin' && role === 'admin' && (
+            <AdminPanel token={token} />
+          )}
         </>
       )}
-      
-      <footer style={{textAlign: 'center', marginTop: '50px', color: '#aaa', fontSize: '0.8rem'}}>
+
+      {/* FOOTER */}
+      <footer
+        style={{
+          textAlign: 'center',
+          marginTop: '50px',
+          color: '#aaa',
+          fontSize: '0.8rem'
+        }}
+      >
         System Status: {message}
       </footer>
     </div>
